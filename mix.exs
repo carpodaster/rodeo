@@ -10,7 +10,7 @@ defmodule Rodeo.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
-     source_url: "https://github.com/carpmeister/rodeo",
+     source_url: "https://github.com/carpodaster/rodeo",
      description: "Test your API consuming Elixir app against a real (one-off) webserver",
      package: package()]
   end
@@ -42,7 +42,7 @@ defmodule Rodeo.Mixfile do
     [
       maintainers: ["Carsten Zimmermann"],
       licenses: ["BSD"],
-      links: %{"GitHub" => "https://github.com/carpmeister/rodeo"},
+      links: %{"GitHub" => "https://github.com/carpodaster/rodeo"},
     ]
   end
 end
