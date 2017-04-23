@@ -41,6 +41,13 @@ defmodule Rodeo.HTTPTest do
       assert {:error, :not_found} = :cowboy.stop_listener(Rodeo.HTTP) # the default name
       assert :ok = :cowboy.stop_listener(:my_rodeo_test_server)
     end
+
+    test "complains about a server process with the same name already running" do
+      assert {:ok, pid, _} = Rodeo.HTTP.start
+      assert {:error, {:already_started, ^pid}} = Rodeo.HTTP.start(:auto)
+
+      :cowboy.stop_listener(Rodeo.HTTP)
+    end
   end
 
 end

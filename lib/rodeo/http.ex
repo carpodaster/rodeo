@@ -18,12 +18,12 @@ defmodule Rodeo.HTTP do
   """
   @spec start(integer(), atom()) :: {atom(), pid(), integer()}
   def start(port, identifier) do
-    {:ok, pid} = :cowboy.start_http(
-      identifier, 100,
-      [port: port],
-      [env: [dispatch: router()]]
-    )
-    {:ok, pid, port}
+    case :cowboy.start_http(identifier, 100, [port: port], [env: [dispatch: router()]]) do
+      {:ok, pid} ->
+        {:ok, pid, port}
+      {:error, reason} ->
+        {:error, reason}
+    end
   end
 
   @doc """
