@@ -1,4 +1,4 @@
-# Rodeo
+# Rodeo [![Build Status](https://travis-ci.org/carpodaster/rodeo.svg?branch=master)](https://travis-ci.org/carpodaster/rodeo)
 
 **TODO: Add description**
 
