@@ -5,9 +5,9 @@ defmodule Rodeo.HTTP do
   cowboy web server instances.
   """
 
-  @port 8080
+  @defaultport 8080
 
-  def start(port \\ @port, identifier \\ __MODULE__)
+  def start(port \\ @defaultport, identifier \\ __MODULE__)
 
   def start(:auto, identifier) do
     find_available_tcp_port()
