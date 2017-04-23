@@ -17,5 +17,15 @@ defmodule Rodeo.CaseTest do
     end
   end
 
+  test "terminates the cowboy server after block execution" do
+    require Rodeo.HTTPCase
+
+    Rodeo.HTTPCase.with_webserver @handler do
+      assert {:ok, %{status_code: 200}} = HTTPoison.get("http://127.0.0.1:#{port}/")
+    end
+
+    {:error, %{reason: :econnrefused}} = HTTPoison.get("http://127.0.0.1:#{port}/")
+  end
+
 end
 
