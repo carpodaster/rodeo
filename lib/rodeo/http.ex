@@ -1,4 +1,4 @@
-defmodule Rodeo.Webserver do
+defmodule Rodeo.HTTP do
 
   @port 8080
 
@@ -26,14 +26,14 @@ defmodule Rodeo.Webserver do
   end
 
   @doc """
-  See `Rodeo.Webserver.router` for format of `matches`.
+  See `Rodeo.HTTP.router` for format of `matches`.
 
   Example:
 
-       iex>Rodeo.Webserver.start
+       iex>Rodeo.HTTP.start
        {:ok, #PID<0.306.0>}
 
-       iex>Rodeo.Webserver.reload( {"/my/new/match", OtherHandler, []} )
+       iex>Rodeo.HTTP.reload( {"/my/new/match", OtherHandler, []} )
        :ok
   """
   def reload(matches, identifier \\ __MODULE__) do
@@ -41,7 +41,7 @@ defmodule Rodeo.Webserver do
   end
 
   @doc """
-  Shortcut for `Rodeo.Webserver.reload({"/", handler, []})`.
+  Shortcut for `Rodeo.HTTP.reload({"/", handler, []})`.
   """
   def change_handler!(handler, identifier \\ __MODULE__) do
     reload({"/[...]", handler, []}, identifier)
