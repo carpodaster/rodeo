@@ -19,7 +19,7 @@ defmodule Rodeo.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :cowboy]]
   end
 
   # Dependencies can be Hex packages:
@@ -34,7 +34,8 @@ defmodule Rodeo.Mixfile do
   defp deps do
     [
       {:cowboy, "~> 1.0"},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, ">= 0.0.0", only: :dev},
+      {:httpoison, "~> 0.11", only: :test}
     ]
   end
 
