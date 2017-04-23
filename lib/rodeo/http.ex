@@ -1,5 +1,10 @@
 defmodule Rodeo.HTTP do
 
+  @moduledoc """
+  Encapsulates starting, configuring, reloading, and stopping of
+  cowboy web server instances.
+  """
+
   @port 8080
 
   def start(port \\ @port, identifier \\ __MODULE__)
