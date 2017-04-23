@@ -1,4 +1,4 @@
-# Rodeo [![Build Status](https://travis-ci.org/carpodaster/rodeo.svg?branch=master)](https://travis-ci.org/carpodaster/rodeo)
+# Rodeo [![Build Status](https://travis-ci.org/carpodaster/rodeo.svg?branch=master)](https://travis-ci.org/carpodaster/rodeo) [![Inline docs](http://inch-ci.org/github/carpodaster/rodeo.svg)](http://inch-ci.org/github/carpodaster/rodeo)
 
 **TODO: Add description**
 

@@ -7,3 +7,5 @@ notifications:
 otp_release:
 - 18.0
 - 19.0
+after_script:
+- "MIX_ENV=docs mix deps.get && MIX_ENV=docs mix inch.report"

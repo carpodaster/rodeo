@@ -35,7 +35,8 @@ defmodule Rodeo.Mixfile do
     [
       {:cowboy, "~> 1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:httpoison, "~> 0.11", only: :test}
+      {:httpoison, "~> 0.11", only: :test},
+      {:inch_ex, only: :docs}
     ]
   end
 
