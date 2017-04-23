@@ -10,12 +10,13 @@ defmodule Rodeo.HTTP do
   end
 
   @doc """
-  Starts the server on a given TCP port `port`. You can pass `:auto` to
-  find a random available TCP port. `identifier` is passed to `:cowboy`
-  as its listener id.
+  Starts the server on a given TCP port `port` (default: 8080). You can
+  pass `:auto` to find a random available TCP port. `identifier` is
+  passed to `:cowboy` as its listener id.
 
   Returns a `{:ok, pid, port}` tuple.
   """
+  @spec start(integer(), atom()) :: {atom(), pid(), integer()}
   def start(port, identifier) do
     {:ok, pid} = :cowboy.start_http(
       identifier, 100,
