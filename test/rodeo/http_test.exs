@@ -31,6 +31,16 @@ defmodule Rodeo.HTTPTest do
 
       :cowboy.stop_listener Rodeo.HTTP
     end
+
+    test "assigns the specified name to the cowboy server" do
+      assert {:ok, _pid, port} = Rodeo.HTTP.start :auto, :my_rodeo_test_server
+
+      assert {:ok, response} = HTTPoison.get("http://127.0.0.1:#{port}/")
+      assert response.status_code == 200
+
+      assert {:error, :not_found} = :cowboy.stop_listener(Rodeo.HTTP) # the default name
+      assert :ok = :cowboy.stop_listener(:my_rodeo_test_server)
+    end
   end
 
 end
