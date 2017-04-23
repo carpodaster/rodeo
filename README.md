@@ -26,10 +26,12 @@ end
 
 ## Usage
 
+Rodeo provides a `with_webserver` macro that can be used in a test case:
+
 ```elixir
 defmodule MyApp.APIClientTest do
   use ExUnit.Case
-  use Redeo.HTTPCase
+  use Rodeo.HTTPCase
   
   test "will start a new cowboy server on a free tcp port" do
     with_webserver do
