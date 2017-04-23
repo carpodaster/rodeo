@@ -35,5 +35,6 @@ defmodule Rodeo.Handler.RequestHeadersEcho do
     ~S"""
     Welcome to ECHO BASE
     """
+    |> Kernel.<>(body)
   end
 end
