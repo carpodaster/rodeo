@@ -28,7 +28,7 @@ defmodule Rodeo.HTTPCase do
         with_webserver(:my_handler), do: assert(is_integer(port))
       end
   """
-  defmacro with_webserver(handler, do: block) do
+  defmacro with_webserver(handler \\ Rodeo.Handler.Default, do: block) do
     quote do
       cowboy_ref = :crypto.strong_rand_bytes(24) |> Base.url_encode64 |> binary_part(0, 24) |> String.to_atom
       {:ok, _pid, var!(port)} = Rodeo.HTTP.start :auto, cowboy_ref
