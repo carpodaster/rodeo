@@ -2,7 +2,9 @@ defmodule RodeoTest do
   use ExUnit.Case
   doctest Rodeo
 
-  test "the truth" do
-    assert 1 + 1 == 2
+  describe "the %Rodeo{} struct" do
+    test "has a port" do
+      assert %Rodeo{}.port == nil
+    end
   end
 end
