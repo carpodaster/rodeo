@@ -49,7 +49,9 @@ defmodule MyApp.APIClientTest do
     end
 
     with_webserver Teapot, fn rodeo ->
-      assert HTTPoison.get!("http://127.0.0.1:#{rodeo.port}/") == "I'm a teapot"
+      # Rodeo.base_url is a convenience function to
+      # glue scheme, ip and port together
+      assert HTTPoison.get!(Rodeo.base_url(rodeo) <> "/earl-grey") == "I'm a teapot"
     end
   end
 end

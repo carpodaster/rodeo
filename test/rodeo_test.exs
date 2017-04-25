@@ -15,4 +15,11 @@ defmodule RodeoTest do
       assert %Rodeo{}.scheme == "http"
     end
   end
+
+  describe "base_url/1" do
+    test "creates a URL from scheme, host and port" do
+      rodeo = %Rodeo{ip_address: "10.0.0.1", port: 8080, scheme: "https"}
+      assert Rodeo.base_url(rodeo) == "https://10.0.0.1:8080"
+    end
+  end
 end
