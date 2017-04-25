@@ -1,28 +1,32 @@
 defmodule Rodeo.CaseTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   test "adds the 'with_webserver' macro" do
     use Rodeo.HTTPCase
-    with_webserver do
-      assert is_integer(port)
+    with_webserver fn rodeo ->
+      assert is_integer(rodeo.port)
     end
   end
 
   test "exposes the TCP port variable" do
     require Rodeo.HTTPCase
-    Rodeo.HTTPCase.with_webserver do
-      assert is_integer(port)
+    Rodeo.HTTPCase.with_webserver fn rodeo ->
+      assert is_integer(rodeo.port)
     end
   end
 
   test "terminates the cowboy server after block execution" do
     require Rodeo.HTTPCase
+    Agent.start(fn -> nil end, name: :rodeo_port_check)
 
-    Rodeo.HTTPCase.with_webserver do
-      assert {:ok, %{status_code: 200}} = HTTPoison.get("http://127.0.0.1:#{port}/")
+    Rodeo.HTTPCase.with_webserver fn rodeo ->
+      Agent.update(:rodeo_port_check, fn _ -> rodeo.port end)
+      assert {:ok, %{status_code: 200}} = HTTPoison.get("http://127.0.0.1:#{rodeo.port}/")
     end
 
+    port = Agent.get(:rodeo_port_check, &(&1))
     {:error, %{reason: :econnrefused}} = HTTPoison.get("http://127.0.0.1:#{port}/")
+    Agent.stop(:rodeo_port_check)
   end
 
   test "injects a custom handler and brews tea" do
@@ -33,8 +37,8 @@ defmodule Rodeo.CaseTest do
       def status(_), do: 418
     end
 
-    Rodeo.HTTPCase.with_webserver Teapot do
-      assert {:ok, %{status_code: 418}} = HTTPoison.get("http://127.0.0.1:#{port}/")
+    Rodeo.HTTPCase.with_webserver Teapot, fn rodeo ->
+      assert {:ok, %{status_code: 418}} = HTTPoison.get("http://127.0.0.1:#{rodeo.port}/")
     end
   end
 

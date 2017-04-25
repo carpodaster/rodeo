@@ -32,24 +32,24 @@ Rodeo provides a `with_webserver` macro that can be used in a test case:
 defmodule MyApp.APIClientTest do
   use ExUnit.Case
   use Rodeo.HTTPCase
-  
+
   test "will start a new cowboy server on a free tcp port" do
-    with_webserver do
-      # The variable `port` is available, holding the assigned TCP port number
-      assert HTTPoison.get!("http://127.0.0.1:#{port}/") == "Hello World"
+    with_webserver fn rodeo ->
+      # rodeo is a %Rodeo{} struct, holding the port of the web server
+      assert HTTPoison.get!("http://127.0.0.1:#{rodeo.port}/") == "Hello World"
     end
     # The webserver is torn down again at this point
   end
-  
+
   test "uses a custom request handler" do
     defmodule Teapot do
       use Rodeo.Handler
       def body(_req),   do: "I'm a teapot"
       def status(_req), do: 418
     end
-    
-    with_webserver Teapot do
-      assert HTTPoison.get!("http://127.0.0.1:#{port}/") == "I'm a teapot"
+
+    with_webserver Teapot, fn rodeo ->
+      assert HTTPoison.get!("http://127.0.0.1:#{rodeo.port}/") == "I'm a teapot"
     end
   end
 end
@@ -57,12 +57,12 @@ end
 
 ## Writing your own handlers
 
-Rodeo provides `Rodeo.Handler` that can be used as a template for custom handlers (see [module documentation](https://hexdocs.pm/rodeo/Rodeo.Handler.html)). 
+Rodeo provides `Rodeo.Handler` that can be used as a template for custom handlers (see [module documentation](https://hexdocs.pm/rodeo/Rodeo.Handler.html)).
 
 ```elixir
 defmodule MyApp.InternalServerError do
   use Rodeo.Handler
-  
+
   def status(_),  do: 500
   def body(_),    do: "Oooops!"
   def headers(_), do: [{"X-Reason", "Server rolled a 1"}]
