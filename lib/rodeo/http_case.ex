@@ -7,35 +7,48 @@ defmodule Rodeo.HTTPCase do
     end
   end
 
-  @doc """
+  @doc ~S"""
   Starts a cowboy server at a random open TCP port with handler `handler`
-  (see `Rodeo.Handler`), runs `block` and terminates the server instance.
+  (see `Rodeo.Handler`), calls the passed function and terminates the server
+  instance.
 
-  The variable `port` is available within the block, holding the TCP port
-  number of the running cowboy web server.
+  The function is passed a `%Rodeo{}` struct.
 
   ## ExUnit Example
 
       test "my private webserver with explicit require" do
         require Rodeo.HTTPCase
-        Rodeo.HTTPCase.with_webserver(:my_handler) do
-          assert is_integer(port)
+        Rodeo.HTTPCase.with_webserver(:my_handler), fn rodeo ->
+          assert is_integer(rodeo.port)
         end
       end
 
-      test "my private webserver calling __using__ first" do
-        use Rodeo.HTTPCase
-        with_webserver(:my_handler), do: assert(is_integer(port))
+      test "my private webserver with 'use Rodeo.HTTPCase'" do
+        with_webserver(:my_handler, fn rodeo -> assert(is_integer(rodeo.port)) end)
+      end
+
+      test "uses default handler" do
+        with_webserver fn rodeo ->
+          "Cowboy server running on port #{rodeo.port}"
+        end
       end
   """
-  defmacro with_webserver(handler \\ Rodeo.Handler.Default, do: block) do
-    quote do
-      cowboy_ref = :crypto.strong_rand_bytes(24) |> Base.url_encode64 |> binary_part(0, 24) |> String.to_atom
-      {:ok, _pid, var!(port)} = Rodeo.HTTP.start :auto, cowboy_ref
-      Rodeo.HTTP.change_handler! unquote(handler), cowboy_ref
-      unquote(block)
-      :cowboy.stop_listener cowboy_ref
-    end
+  def with_webserver(handler, fun) do
+    ref = cowboy_ref()
+    {:ok, _pid, port} = Rodeo.HTTP.start :auto, ref
+    Rodeo.HTTP.change_handler! handler, ref
+    fun.(%Rodeo{port: port})
+    :cowboy.stop_listener ref
+  end
+
+  def with_webserver(fun) when is_function(fun), do: with_webserver(Rodeo.Handler.Default, fun)
+
+  # Creates a random identifier
+  defp cowboy_ref do
+    :crypto.strong_rand_bytes(24)
+    |> Base.url_encode64
+    |> binary_part(0, 24)
+    |> String.to_atom
   end
 
 end
