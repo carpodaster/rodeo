@@ -26,7 +26,7 @@ end
 
 ## Usage
 
-Rodeo provides a `with_webserver` macro that can be used in a test case:
+Rodeo provides `with_webserver` that can be used in a test case:
 
 ```elixir
 defmodule MyApp.APIClientTest do
