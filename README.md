@@ -12,7 +12,7 @@ Or you could fire real HTTP requests to a real _in promptu_ webserver instead. R
 
 ```elixir
 def deps do
-  [{:rodeo, "~> 0.2.0"}]
+  [{:rodeo, "~> 0.3.0"}]
 end
 ```
 
