@@ -8,10 +8,12 @@ defmodule Rodeo.CaseTest do
     end
   end
 
-  test "exposes the TCP port variable" do
+  test "exposes the data for running server" do
     require Rodeo.HTTPCase
     Rodeo.HTTPCase.with_webserver fn rodeo ->
       assert is_integer(rodeo.port)
+      assert rodeo.ip_address == "127.0.0.1"
+      assert rodeo.scheme == "http"
     end
   end
 
