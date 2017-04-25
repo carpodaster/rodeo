@@ -34,13 +34,21 @@ defmodule Rodeo.HTTPCase do
       end
   """
   def with_webserver(handler, fun) do
-    cowboy_ref = :crypto.strong_rand_bytes(24) |> Base.url_encode64 |> binary_part(0, 24) |> String.to_atom
-    {:ok, _pid, port} = Rodeo.HTTP.start :auto, cowboy_ref
-    Rodeo.HTTP.change_handler! handler, cowboy_ref
+    ref = cowboy_ref()
+    {:ok, _pid, port} = Rodeo.HTTP.start :auto, ref
+    Rodeo.HTTP.change_handler! handler, ref
     fun.(%Rodeo{port: port})
-    :cowboy.stop_listener cowboy_ref
+    :cowboy.stop_listener ref
   end
 
   def with_webserver(fun) when is_function(fun), do: with_webserver(Rodeo.Handler.Default, fun)
+
+  # Creates a random identifier
+  defp cowboy_ref do
+    :crypto.strong_rand_bytes(24)
+    |> Base.url_encode64
+    |> binary_part(0, 24)
+    |> String.to_atom
+  end
 
 end
